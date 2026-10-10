@@ -19,6 +19,8 @@ data/processed/*
 models/*
 !data/processed/.gitkeep
 !models/.gitkeep
+# The one pipeline the hosted API loads (src.explain.load_model)
+!models/rf_class_weight.joblib
 
 # Editors and OS
 .vscode/

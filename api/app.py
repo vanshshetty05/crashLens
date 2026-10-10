@@ -17,13 +17,17 @@ Run from the project root:
 The server listens on 127.0.0.1 only. Browsers may call it only from the
 frontend origins: http://127.0.0.1:8000 and http://localhost:8000 by default,
 or a comma-separated list in the CRASHLENS_FRONTEND_ORIGINS environment variable.
+
+The app also serves the frontend at ``/``, so one process is enough when hosted:
+
+    gunicorn "api.app:create_app()" --bind 0.0.0.0:$PORT
 """
 from __future__ import annotations
 
 import os
 
 import pandas as pd
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, send_from_directory
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
@@ -32,7 +36,8 @@ from src.data import PROJECT_ROOT, SEVERITY_ORDER, load_data
 HOST = "127.0.0.1"
 PORT = 5000
 DEFAULT_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000"]
-MAP_PATH = PROJECT_ROOT / "frontend" / "data" / "india_states_severity.geojson"
+FRONTEND_DIR = PROJECT_ROOT / "frontend"
+MAP_PATH = FRONTEND_DIR / "data" / "india_states_severity.geojson"
 
 # The model was trained on 2019 to 2022. A few years past the data are allowed for "what if" queries.
 MAX_YEAR_AHEAD = 5
@@ -151,7 +156,7 @@ def create_app(explain=None, data: Dataset | None = None, map_path=MAP_PATH) -> 
 
     ``explain`` replaces ``explain_one`` in tests, which then run without the model files.
     """
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1024
     CORS(app, origins=frontend_origins(), methods=["GET", "POST"], allow_headers=["Content-Type"])
 
@@ -175,6 +180,14 @@ def create_app(explain=None, data: Dataset | None = None, map_path=MAP_PATH) -> 
     def server_error(error):
         app.logger.exception("Unhandled error")
         return jsonify(error="Internal server error."), 500
+
+    @app.get("/")
+    def index():
+        return send_from_directory(FRONTEND_DIR, "index.html")
+
+    @app.get("/<any(data, img):folder>/<path:filename>")
+    def frontend_file(folder, filename):
+        return send_from_directory(FRONTEND_DIR / folder, filename)
 
     @app.get("/health")
     def health():

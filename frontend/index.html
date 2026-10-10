@@ -246,8 +246,10 @@
 <script>
 "use strict";
 // The API address can be changed with ?api=http://host:port
+// When the API itself serves this page (hosted), it is the page's own origin.
 const query = new URLSearchParams(location.search);
-const API = (query.get("api") || "http://127.0.0.1:5000").replace(/\/$/, "");
+const SAME_ORIGIN = location.protocol.startsWith("http") && location.port !== "8000";
+const API = (query.get("api") || (SAME_ORIGIN ? location.origin : "http://127.0.0.1:5000")).replace(/\/$/, "");
 const LEVELS = ["Low", "Medium", "High"];
 const ICON = { Low: "▼", Medium: "●", High: "▲" };   // shape as well as colour
 const $ = (id) => document.getElementById(id);
