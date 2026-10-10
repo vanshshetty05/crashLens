@@ -1,0 +1,57 @@
+factor_group,factor_value,accidents,killed,severity
+area_type,Rural,1636997,655855,40.06
+area_type,Urban,1020177,299500,29.36
+collision_type,Fixed object,90890,40497,44.56
+collision_type,Head on collision,484162,163020,33.67
+collision_type,Hit and run,384238,174176,45.33
+collision_type,Hit from back,573561,186581,32.53
+collision_type,Hit from side,388281,111608,28.74
+collision_type,Others,424830,140645,33.11
+collision_type,Run off road,117942,54326,46.06
+collision_type,Vehicle overturn,118099,54114,45.82
+collision_type,With parked vehicle,75171,30388,40.43
+impacting_vehicle,Auto rickshaw,121927,36065,29.58
+impacting_vehicle,Bicycle,62233,26780,43.03
+impacting_vehicle,Bus,81402,24405,29.98
+impacting_vehicle,Car/Taxi/Van/LMV,427831,125759,29.39
+impacting_vehicle,Other non-motorised vehicle,30644,13770,44.94
+impacting_vehicle,Others,146831,65761,44.79
+impacting_vehicle,Pedestrian,451975,182991,40.49
+impacting_vehicle,Truck/Lorry,166227,63185,38.01
+impacting_vehicle,Two wheeler,1168104,416645,35.67
+junction_type,Four arm junction,122358,35290,28.84
+junction_type,Others,903109,332248,36.79
+junction_type,Roundabout junction,75425,26305,34.88
+junction_type,Staggered junction,98556,35307,35.82
+junction_type,T-junction,236781,71643,30.26
+junction_type,Y-junction,100927,34088,33.77
+road_environment,Institutional area,179622,59061,32.88
+road_environment,Market/Commercial area,391454,115615,29.53
+road_environment,Open area,1010199,418644,41.44
+road_environment,Others,287411,78991,27.48
+road_environment,Residential area,501831,170894,34.05
+road_feature,Bridge,84548,34731,41.08
+road_feature,Culvert,50820,21218,41.75
+road_feature,Curved road,328257,119546,36.42
+road_feature,Ongoing road works/Under construction,59241,25710,43.4
+road_feature,Others,306958,101412,33.04
+road_feature,Potholes,27682,11494,41.52
+road_feature,Steep grade,28559,11887,41.62
+road_feature,Straight road,1771109,629358,35.53
+traffic_control,Flashing signal/Blinker,37524,12362,32.94
+traffic_control,Others,903109,332248,36.79
+traffic_control,Police controlled,51015,14547,28.52
+traffic_control,Stop sign,32780,11746,35.83
+traffic_control,Traffic light signal,56986,13856,24.31
+traffic_control,Uncontrolled,455742,150122,32.94
+traffic_violation,Driving on wrong side,136508,51508,37.73
+traffic_violation,Drunken driving/Alcohol & drugs,57254,23040,40.24
+traffic_violation,Jumping red light,17387,6148,35.36
+traffic_violation,Others,515638,193228,37.47
+traffic_violation,Over-speeding,1886967,662306,35.1
+traffic_violation,Use of mobile phone,43420,19125,44.05
+weather,Foggy & Misty,191560,83176,43.42
+weather,Hail/Sleet,24477,11309,46.2
+weather,Others,246376,106748,43.33
+weather,Rainy,223347,83150,37.23
+weather,Sunny/Clear,1971414,670972,34.04

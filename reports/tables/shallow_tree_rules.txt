@@ -1,0 +1,43 @@
+|--- region_South <= 0.50
+|   |--- state_harmonised_Jammu & Kashmir and Ladakh <= 0.50
+|   |   |--- state_harmonised_Madhya Pradesh <= 0.50
+|   |   |   |--- state_harmonised_Goa <= 0.50
+|   |   |   |   |--- class: High
+|   |   |   |--- state_harmonised_Goa >  0.50
+|   |   |   |   |--- class: Low
+|   |   |--- state_harmonised_Madhya Pradesh >  0.50
+|   |   |   |--- factor_group_collision_type <= 0.50
+|   |   |   |   |--- class: Low
+|   |   |   |--- factor_group_collision_type >  0.50
+|   |   |   |   |--- class: Low
+|   |--- state_harmonised_Jammu & Kashmir and Ladakh >  0.50
+|   |   |--- log_accidents <= 4.27
+|   |   |   |--- year <= 2021.50
+|   |   |   |   |--- class: Low
+|   |   |   |--- year >  2021.50
+|   |   |   |   |--- class: Low
+|   |   |--- log_accidents >  4.27
+|   |   |   |--- log_accidents <= 6.37
+|   |   |   |   |--- class: Low
+|   |   |   |--- log_accidents >  6.37
+|   |   |   |   |--- class: Low
+|--- region_South >  0.50
+|   |--- state_harmonised_Andhra Pradesh <= 0.50
+|   |   |--- state_harmonised_Telangana <= 0.50
+|   |   |   |--- state_harmonised_Karnataka <= 0.50
+|   |   |   |   |--- class: Low
+|   |   |   |--- state_harmonised_Karnataka >  0.50
+|   |   |   |   |--- class: Low
+|   |   |--- state_harmonised_Telangana >  0.50
+|   |   |   |--- log_accidents <= 6.98
+|   |   |   |   |--- class: Low
+|   |   |   |--- log_accidents >  6.98
+|   |   |   |   |--- class: Medium
+|   |--- state_harmonised_Andhra Pradesh >  0.50
+|   |   |--- log_accidents <= 5.72
+|   |   |   |--- class: Medium
+|   |   |--- log_accidents >  5.72
+|   |   |   |--- factor_group_collision_type <= 0.50
+|   |   |   |   |--- class: Medium
+|   |   |   |--- factor_group_collision_type >  0.50
+|   |   |   |   |--- class: Medium

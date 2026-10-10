@@ -1,0 +1,2 @@
+metric,n_models,n_folds,friedman_chi2,dof,p_value,alpha,nemenyi_critical_difference
+macro_f1,5,10,13.200000000000017,4,0.01033879708536391,0.05,1.9288277551893114

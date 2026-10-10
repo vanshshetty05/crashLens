@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrashLens</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #ffffff; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --blue: #2a78d6; --blue-dark: #1c5cab;
+    --low: #0ca30c; --low-bg: #e9f7e9; --low-ink: #075c07;
+    --medium: #fab219; --medium-bg: #fff4d9; --medium-ink: #6b4a00;
+    --high: #d03b3b; --high-bg: #fdeaea; --high-ink: #8c1f1f;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 16px 16px 0; max-width: 1040px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0; }
+  header p { margin: 2px 0 12px; color: var(--ink2); font-size: .95rem; }
+  h2 { font-size: 1.1rem; margin: 0 0 4px; }
+  h3 { font-size: 1rem; margin: 0 0 8px; }
+  main { max-width: 1040px; margin: 0 auto; padding: 0 16px 40px; }
+  .hint { color: var(--ink2); font-size: .9rem; margin: 0 0 12px; }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--axis); overflow-x: auto; }
+  .tabs button { flex: 0 0 auto; min-height: 44px; padding: 8px 16px; border: 0; background: none; cursor: pointer;
+                 font: inherit; color: var(--ink2); border-bottom: 3px solid transparent; }
+  .tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
+  .tabs button:focus-visible, select:focus-visible, .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  section[role="tabpanel"] { padding-top: 20px; }
+  section[hidden] { display: none; }
+
+  .card { background: var(--surface); border: 1px solid var(--grid); border-radius: var(--radius); padding: 16px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
+  .form { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: end; }
+  label { display: block; font-size: .85rem; color: var(--ink2); margin-bottom: 4px; }
+  select { width: 100%; min-height: 44px; padding: 8px; font: inherit; color: var(--ink); background: var(--surface);
+           border: 1px solid var(--axis); border-radius: 8px; }
+  .btn { min-height: 44px; padding: 8px 20px; font: inherit; font-weight: 600; color: #fff; background: var(--blue);
+         border: 0; border-radius: 8px; cursor: pointer; }
+  .btn:hover { background: var(--blue-dark); }
+  .btn:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--axis); }
+
+  .banner { margin-top: 16px; padding: 14px 16px; border-radius: var(--radius); background: var(--high-bg);
+            border: 1px solid var(--high); color: var(--high-ink); }
+  .banner strong { display: block; margin-bottom: 4px; }
+  .banner code { background: #fff; padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  .banner .btn { margin-top: 10px; }
+  .notice { margin-top: 12px; padding: 10px 14px; border-radius: 8px; background: var(--medium-bg); color: var(--medium-ink); }
+
+  .result { margin-top: 16px; padding: 18px; border-radius: var(--radius); border: 1px solid; border-left-width: 8px; }
+  .result.Low { background: var(--low-bg); border-color: var(--low); color: var(--low-ink); }
+  .result.Medium { background: var(--medium-bg); border-color: var(--medium); color: var(--medium-ink); }
+  .result.High { background: var(--high-bg); border-color: var(--high); color: var(--high-ink); }
+  .result .level { font-size: 1.7rem; font-weight: 700; line-height: 1.2; }
+  .result .what { color: var(--ink); margin-top: 4px; }
+  .result .basis { color: var(--ink2); font-size: .85rem; margin-top: 6px; }
+
+  .bar-row { display: grid; grid-template-columns: 74px 1fr 52px; gap: 8px; align-items: center; margin: 8px 0; font-size: .92rem; }
+  .track { height: 14px; background: #f0efec; border-radius: 7px; overflow: hidden; }
+  .fill { height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; }
+  .fill.Low { background: var(--low); } .fill.Medium { background: var(--medium); } .fill.High { background: var(--high); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .why { list-style: none; margin: 0; padding: 0; }
+  .why li { padding: 10px 0; border-top: 1px solid var(--grid); }
+  .why li:first-child { border-top: 0; padding-top: 0; }
+  .why .factor { font-weight: 600; }
+  .why .effect { color: var(--ink2); font-size: .9rem; }
+  .why .track { height: 8px; margin-top: 6px; }
+  .why .fill { background: var(--blue); } .why .fill.opposes { background: var(--muted); }
+
+  svg.chart { width: 100%; height: auto; display: block; max-width: 900px; }
+  svg.chart text { font: 11px system-ui, sans-serif; fill: var(--ink2); }
+  svg.chart .val { fill: var(--ink); }
+  details { margin-top: 8px; font-size: .9rem; }
+  summary { cursor: pointer; color: var(--ink2); min-height: 32px; }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+  th, td { padding: 5px 8px; border-bottom: 1px solid var(--grid); text-align: right; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink2); font-weight: 600; }
+  .scroll { overflow-x: auto; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 12px; }
+  .toolbar > div { min-width: 150px; }
+  .years { display: flex; flex-wrap: wrap; gap: 4px; }
+  .years button { min-width: 56px; min-height: 44px; border: 1px solid var(--axis); background: var(--surface);
+                  border-radius: 8px; font: inherit; cursor: pointer; color: var(--ink); }
+  .years button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 600; }
+  #india-map { height: min(70vh, 640px); min-height: 380px; border-radius: var(--radius); border: 1px solid var(--grid);
+         background: #f4f6f8; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: .85rem; color: var(--ink2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 18px; height: 14px; border-radius: 3px; display: inline-block; border: 1px solid rgba(11,11,11,.1); }
+  .leaflet-popup-content { font: 14px/1.4 system-ui, sans-serif; margin: 12px 14px; }
+  .popup h4 { margin: 0 0 4px; font-size: 1rem; }
+  .popup .big { font-size: 1.3rem; font-weight: 700; }
+  .popup .small { color: #52514e; font-size: .82rem; }
+
+  .hbar { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: 10px; align-items: center; margin: 6px 0; font-size: .9rem; }
+  .hbar .name { text-align: right; line-height: 1.2; }
+  .hbar .name small { display: block; color: var(--muted); }
+  .hbar .plot { position: relative; height: 22px; }
+  .hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--blue); border-radius: 0 4px 4px 0; }
+  .hbar .value { position: absolute; top: 0; line-height: 22px; padding-left: 6px; font-variant-numeric: tabular-nums; }
+  .hbar .ref { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px dashed var(--ink2); }
+  figure { margin: 0; }
+  figure img { width: 100%; height: auto; border-radius: 6px; }
+  figcaption { color: var(--ink2); font-size: .88rem; margin-top: 6px; }
+  footer { max-width: 1040px; margin: 0 auto; padding: 0 16px 32px; color: var(--muted); font-size: .82rem; }
+
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    .form { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+    .hbar { grid-template-columns: 1fr; gap: 2px; margin: 10px 0; }
+    .hbar .name { text-align: left; }
+    .hbar .name small { display: inline; margin-left: 6px; }
+    #india-map { height: 62vh; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>CrashLens</h1>
+  <p>How deadly are road accidents across India? State-level statistics from MoRTH, 2019 to 2024.</p>
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-risk" aria-controls="panel-risk" aria-selected="true">Risk check</button>
+    <button role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1">India map</button>
+    <button role="tab" id="tab-insights" aria-controls="panel-insights" aria-selected="false" tabindex="-1">Insights</button>
+  </div>
+</header>
+
+<main>
+  <!-- 1. Risk check -->
+  <section role="tabpanel" id="panel-risk" aria-labelledby="tab-risk">
+    <h2>Risk check</h2>
+    <p class="hint">Pick a state and a condition to see the predicted severity level. High means clearly more deaths per
+      100 accidents than the national figure (above 1.25 times); Low means clearly fewer (below 0.75 times).</p>
+
+    <form class="card form" id="risk-form">
+      <div><label for="state">State or UT</label><select id="state" disabled></select></div>
+      <div><label for="group">Type of condition</label><select id="group" disabled></select></div>
+      <div><label for="value">Condition</label><select id="value" disabled></select></div>
+      <button class="btn" id="check" type="submit" disabled>Check risk</button>
+    </form>
+
+    <div class="banner" id="api-down" role="alert" hidden>
+      <strong>The prediction service is not reachable.</strong>
+      <span id="api-down-text"></span>
+      <div><button class="btn secondary" id="retry" type="button">Try again</button></div>
+    </div>
+    <div class="notice" id="risk-error" role="alert" hidden></div>
+    <p class="hint" id="risk-loading" role="status" hidden>Working out the prediction…</p>
+
+    <div id="risk-result" aria-live="polite" hidden>
+      <div class="result" id="result-card">
+        <div class="level" id="result-level"></div>
+        <div class="what" id="result-what"></div>
+        <div class="basis" id="result-basis"></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>How sure is the model?</h3>
+          <div id="probabilities"></div>
+        </div>
+        <div class="card">
+          <h3>Why?</h3>
+          <ul class="why" id="why"></ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h3>What actually happened: deaths per 100 accidents</h3>
+        <p class="hint" id="history-summary"></p>
+        <div id="history-chart"></div>
+        <details><summary>Show the numbers</summary><div class="scroll" id="history-table"></div></details>
+      </div>
+      <p class="hint" style="margin-top:12px">The prediction describes a whole category of accidents in a state, based on
+        yearly totals. It is not a forecast for any single journey or crash.</p>
+    </div>
+  </section>
+
+  <!-- 2. India map -->
+  <section role="tabpanel" id="panel-map" aria-labelledby="tab-map" hidden>
+    <h2>Severity by state</h2>
+    <p class="hint">Persons killed per 100 accidents. Tap a state for its figures.</p>
+    <div class="toolbar">
+      <div>
+        <label id="year-label">Year</label>
+        <div class="years" id="years" role="group" aria-labelledby="year-label"></div>
+      </div>
+    </div>
+    <div class="notice" id="map-error" role="alert" hidden></div>
+    <div id="india-map" aria-label="Map of India coloured by road accident severity"></div>
+    <div class="legend" id="legend"></div>
+    <p class="hint" style="margin-top:8px">Jammu &amp; Kashmir and Ladakh are reported as one unit and share one value.
+      States with fewer than 500 accidents in a year have unstable figures.</p>
+  </section>
+
+  <!-- 3. Insights -->
+  <section role="tabpanel" id="panel-insights" aria-labelledby="tab-insights" hidden>
+    <h2>The deadliest conditions in India</h2>
+    <p class="hint" id="insights-hint">All of India, 2019 to 2024 combined.</p>
+    <div class="notice" id="insights-error" role="alert" hidden></div>
+    <div class="card">
+      <div class="toolbar">
+        <div><label for="rank-by">Rank by</label>
+          <select id="rank-by">
+            <option value="severity">Deaths per 100 accidents</option>
+            <option value="killed">Total deaths</option>
+          </select></div>
+        <div><label for="rank-group">Type of condition</label><select id="rank-group"></select></div>
+      </div>
+      <div id="ranking"></div>
+      <div class="legend" id="ranking-legend" hidden>
+        <span><i style="border:0;border-left:2px dashed #52514e;width:0;border-radius:0"></i> <span id="ranking-ref"></span></span>
+      </div>
+      <details><summary>Show the full table</summary><div class="scroll" id="ranking-table"></div></details>
+    </div>
+    <div class="grid">
+      <figure class="card">
+        <a href="img/fig12_region_condition_heatmap.png" target="_blank" rel="noopener"><img src="img/fig12_region_condition_heatmap.png" loading="lazy"
+             alt="Heatmap of deaths per 100 accidents by region and by weather and road feature. The East is highest in every row and the South lowest."></a>
+        <figcaption>Where matters more than what: every weather and road condition is deadliest in the East and least
+          deadly in the South. Tap the chart to enlarge it.</figcaption>
+      </figure>
+      <figure class="card">
+        <a href="img/fig13_karnataka_profile.png" target="_blank" rel="noopener"><img src="img/fig13_karnataka_profile.png" loading="lazy"
+             alt="Karnataka compared with India: severity per year and by collision type, road feature and weather. Karnataka is lower than India in almost every category."></a>
+        <figcaption>Karnataka sits below the national figure in every year and in almost every condition. Tap the chart to enlarge it.</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer>Source: Ministry of Road Transport and Highways, <em>Road Accidents in India</em>, 2019 to 2024. CrashLens research project.</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+"use strict";
+// The API address can be changed with ?api=http://host:port
+const query = new URLSearchParams(location.search);
+const API = (query.get("api") || "http://127.0.0.1:5000").replace(/\/$/, "");
+const LEVELS = ["Low", "Medium", "High"];
+const ICON = { Low: "▼", Medium: "●", High: "▲" };   // shape as well as colour
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => Number(n).toLocaleString("en-IN");
+const pretty = (s) => s.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
+
+/** Create an element. Text is always set with textContent, so API data is never parsed as HTML. */
+function el(tag, props = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") node.className = v;
+    else if (k === "text") node.textContent = v;
+    else if (k === "style") node.style.cssText = v;
+    else node.setAttribute(k, v);
+  }
+  for (const c of children) node.append(c);
+  return node;
+}
+
+async function getJSON(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    const body = await response.json().catch(() => null);
+    if (!response.ok) {
+      const error = new Error((body && body.error) || `The server answered with status ${response.status}.`);
+      error.status = response.status;
+      throw error;
+    }
+    return body;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function table(headers, rows) {
+  const t = el("table");
+  t.append(el("thead", {}, el("tr", {}, ...headers.map((h) => el("th", { text: h, scope: "col" })))));
+  t.append(el("tbody", {}, ...rows.map((r) => el("tr", {}, ...r.map((c) => el("td", { text: c }))))));
+  return t;
+}
+
+/* ---------- tabs ---------- */
+const TABS = ["risk", "map", "insights"];
+function showTab(name, focus = false) {
+  if (!TABS.includes(name)) name = "risk";
+  for (const t of TABS) {
+    const selected = t === name;
+    $("tab-" + t).setAttribute("aria-selected", selected);
+    $("tab-" + t).tabIndex = selected ? 0 : -1;
+    $("panel-" + t).hidden = !selected;
+  }
+  if (focus) $("tab-" + name).focus();
+  if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
+  if (name === "map") initMap();
+  if (name === "insights") initInsights();
+}
+TABS.forEach((t, i) => {
+  $("tab-" + t).addEventListener("click", () => showTab(t));
+  $("tab-" + t).addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") showTab(TABS[(i + 1) % TABS.length], true);
+    if (e.key === "ArrowLeft") showTab(TABS[(i + TABS.length - 1) % TABS.length], true);
+  });
+});
+
+/* ---------- 1. risk check ---------- */
+let options = null;
+
+function fillSelect(select, items, label = (x) => x) {
+  select.replaceChildren(...items.map((x) => el("option", { value: x, text: label(x) })));
+}
+
+function setFormEnabled(enabled) {
+  for (const id of ["state", "group", "value", "check"]) $(id).disabled = !enabled;
+}
+
+async function connect() {
+  $("api-down").hidden = true;
+  try {
+    options = await getJSON(API + "/api/options");
+  } catch (error) {
+    setFormEnabled(false);
+    const opened = location.protocol === "file:";
+    $("api-down-text").replaceChildren(
+      `CrashLens could not connect to ${API}. `,
+      "Start it from the project folder with ", el("code", { text: "python -m api.app" }), ", then try again.",
+      opened ? " Also open this page through a local web server (see the README), not by double-clicking the file." : "",
+      " The India map and Insights tabs still work."
+    );
+    $("api-down").hidden = false;
+    return false;
+  }
+  fillSelect($("state"), options.states);
+  fillSelect($("group"), options.factor_groups, pretty);
+  const pick = (id, wanted) => { if (wanted && [...$(id).options].some((o) => o.value === wanted)) $(id).value = wanted; };
+  pick("state", query.get("state") || "Karnataka");
+  pick("group", query.get("group") || "weather");
+  fillSelect($("value"), options.factor_values[$("group").value]);
+  pick("value", query.get("value"));
+  setFormEnabled(true);
+  if (query.get("state") && query.get("group") && query.get("value")) predict();
+  return true;
+}
+
+$("group").addEventListener("change", () => fillSelect($("value"), options.factor_values[$("group").value]));
+$("retry").addEventListener("click", connect);
+$("risk-form").addEventListener("submit", (e) => { e.preventDefault(); predict(); });
+
+async function predict() {
+  $("risk-error").hidden = true;
+  $("risk-result").hidden = true;
+  $("risk-loading").hidden = false;
+  $("check").disabled = true;
+  try {
+    const body = { state: $("state").value, factor_group: $("group").value, factor_value: $("value").value };
+    const result = await getJSON(API + "/api/predict", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    }, 30000);
+    renderResult(result);
+  } catch (error) {
+    if (error.status) {            // the API answered: show its message
+      $("risk-error").textContent = error.message;
+      $("risk-error").hidden = false;
+    } else {                       // no answer at all
+      await connect();
+    }
+  } finally {
+    $("risk-loading").hidden = true;
+    $("check").disabled = !options;
+  }
+}
+
+function renderResult(r) {
+  const level = r.severity_level, input = r.input;
+  $("result-card").className = "result " + level;
+  $("result-level").textContent = `${ICON[level]} ${level} severity`;
+  $("result-what").textContent = `${input.factor_value} (${pretty(input.factor_group).toLowerCase()}) in ${input.state}, ${input.year}`;
+  $("result-basis").textContent =
+    `Based on ${fmt(input.accidents)} accidents reported in ${input.accidents_year}. Model: ${r.model}.`;
+
+  $("probabilities").replaceChildren(...LEVELS.map((l) => {
+    const p = r.probabilities[l] * 100;
+    return el("div", { class: "bar-row" },
+      el("span", { text: `${ICON[l]} ${l}` }),
+      el("div", { class: "track", role: "img", "aria-label": `${l}: ${p.toFixed(0)} percent` },
+        el("div", { class: "fill " + l, style: `width:${p}%` })),
+      el("span", { class: "num", text: p.toFixed(0) + "%" }));
+  }));
+
+  const largest = Math.max(...r.top_factors.map((f) => Math.abs(f.contribution)), 0.0001);
+  $("why").replaceChildren(...r.top_factors.map((f) => {
+    const points = (f.contribution * 100).toFixed(1);
+    const supports = f.effect === "supports";
+    const value = f.feature === "accidents" ? `${fmt(f.value)} accidents` : String(f.value).replace(/_/g, " ");
+    return el("li", {},
+      el("div", { class: "factor", text: `${f.label}: ${value}` }),
+      el("div", { class: "effect", text: supports
+        ? `Pushes towards ${level} (+${points} percentage points)`
+        : `Pulls away from ${level} (${points} percentage points)` }),
+      el("div", { class: "track" },
+        el("div", { class: "fill" + (supports ? "" : " opposes"), style: `width:${Math.abs(f.contribution) / largest * 100}%` })));
+  }));
+
+  $("risk-result").hidden = false;      // shown first, so the chart can measure its width
+  renderHistory(r.history, input.state);
+}
+
+function renderHistory(history, state) {
+  const rows = history.filter((h) => h.severity_index !== null);
+  const latest = rows[rows.length - 1];
+  $("history-summary").textContent = latest
+    ? `In ${latest.year}: ${latest.severity_index.toFixed(1)} in ${state} against ${latest.national_severity.toFixed(1)} for India as a whole.`
+    : "No accidents were reported for this combination.";
+  $("history-chart").replaceChildren(rows.length > 1 ? lineChart(rows, state, $("history-chart").clientWidth) : "");
+  $("history-table").replaceChildren(table(
+    ["Year", "Accidents", "Deaths", "Deaths per 100 accidents", "India"],
+    history.map((h) => [h.year, fmt(h.accidents), fmt(h.killed),
+      h.severity_index === null ? "n/a" : h.severity_index.toFixed(1), h.national_severity.toFixed(1)])));
+}
+
+function svg(tag, attrs = {}, text) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+/** Two lines: the state (blue) and India (grey), with the end values labelled. */
+function lineChart(rows, state, width) {
+  const W = Math.max(280, Math.min(width || 640, 900)), H = 240, left = 30, right = 112, top = 14, bottom = 28;
+  const years = rows.map((r) => r.year);
+  const top_value = Math.max(...rows.map((r) => Math.max(r.severity_index, r.national_severity)));
+  const step = top_value > 60 ? 20 : 10;
+  const max = Math.ceil(top_value * 1.08 / step) * step;
+  const x = (yr) => left + (yr - years[0]) / Math.max(1, years[years.length - 1] - years[0]) * (W - left - right);
+  const y = (v) => top + (1 - v / max) * (H - top - bottom);
+  const root = svg("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": `Deaths per 100 accidents by year, ${state} and India` });
+
+  for (let v = 0; v <= max; v += step) {
+    root.append(svg("line", { x1: left, x2: W - right, y1: y(v), y2: y(v), stroke: v ? "#e1e0d9" : "#c3c2b7" }));
+    root.append(svg("text", { x: left - 6, y: y(v) + 4, "text-anchor": "end" }, v));
+  }
+  for (const yr of years) root.append(svg("text", { x: x(yr), y: H - 8, "text-anchor": "middle" }, yr));
+
+  const series = [
+    { key: "national_severity", name: "India", color: "#52514e" },
+    { key: "severity_index", name: state, color: "#2a78d6" },
+  ];
+  const last = rows[rows.length - 1];
+  // Keep the two end labels apart when the lines finish close together.
+  let labelY = series.map((s) => y(last[s.key]));
+  if (Math.abs(labelY[0] - labelY[1]) < 14) {
+    const mid = (labelY[0] + labelY[1]) / 2, up = labelY[0] < labelY[1] ? 0 : 1;
+    labelY[up] = mid - 7; labelY[1 - up] = mid + 7;
+  }
+  series.forEach((s, i) => {
+    root.append(svg("polyline", { fill: "none", stroke: s.color, "stroke-width": 2.5, "stroke-linejoin": "round",
+      points: rows.map((r) => `${x(r.year)},${y(r[s.key])}`).join(" ") }));
+    for (const r of rows) {
+      const dot = svg("circle", { cx: x(r.year), cy: y(r[s.key]), r: 4.5, fill: s.color, stroke: "#fff", "stroke-width": 1.5 });
+      dot.append(svg("title", {}, `${s.name}, ${r.year}: ${r[s.key].toFixed(1)}`));
+      root.append(dot);
+    }
+    const name = s.name.length > 12 ? s.name.slice(0, 11) + "…" : s.name;
+    root.append(svg("text", { x: x(last.year) + 10, y: labelY[i] + 4, class: "val" }, `${name} ${last[s.key].toFixed(1)}`));
+  });
+  return root;
+}
+
+/* ---------- 2. map ---------- */
+const BINS = [
+  { max: 15, color: "#cde2fb", label: "under 15" }, { max: 30, color: "#86b6ef", label: "15 to 30" },
+  { max: 45, color: "#3987e5", label: "30 to 45" }, { max: 60, color: "#1c5cab", label: "45 to 60" },
+  { max: Infinity, color: "#0d366b", label: "60 or more" },
+];
+const NO_DATA = "#e1e0d9";
+let map = null, layer = null, mapYear = 2024, mapStarted = false;
+
+const colorFor = (v) => (v === null || v === undefined) ? NO_DATA : BINS.find((b) => v < b.max).color;
+const styleFor = (feature) => ({
+  fillColor: colorFor(feature.properties["severity_" + mapYear]), fillOpacity: 1, color: "#ffffff", weight: 1,
+});
+
+function popupFor(p) {
+  const severity = p["severity_" + mapYear], accidents = p["accidents_" + mapYear], killed = p["killed_" + mapYear];
+  const box = el("div", { class: "popup" }, el("h4", { text: p.state }));
+  if (severity === null || severity === undefined) {
+    box.append(el("div", { text: `No accidents reported in ${mapYear}.` }));
+    return box;
+  }
+  box.append(
+    el("div", { class: "big", text: severity.toFixed(1) }),
+    el("div", { class: "small", text: `killed per 100 accidents, ${mapYear}` }),
+    el("div", { text: `${fmt(accidents)} accidents, ${fmt(killed)} deaths` }));
+  if (accidents < 500) box.append(el("div", { class: "small", text: "Fewer than 500 accidents: this figure is unstable." }));
+  if (p.state !== p.state_harmonised) box.append(el("div", { class: "small", text: `Reported as ${p.state_harmonised}.` }));
+  return box;
+}
+
+async function initMap() {
+  if (mapStarted) { if (map) map.invalidateSize(); return; }
+  mapStarted = true;
+  const fail = (message) => { $("map-error").textContent = message; $("map-error").hidden = false; };
+  if (typeof L === "undefined") {
+    return fail("The map library could not be loaded. Check your internet connection and reload the page.");
+  }
+  let geo;
+  try {
+    geo = await getJSON(API + "/api/map");
+  } catch (apiError) {
+    try {                       // the same file ships with the page, so the map works without the API
+      geo = await getJSON("data/india_states_severity.geojson");
+    } catch (fileError) {
+      mapStarted = false;
+      return fail(`The map data could not be loaded. Start the API with "python -m api.app" and reopen this tab.`);
+    }
+  }
+  const years = Object.keys(geo.features[0].properties).filter((k) => /^severity_\d{4}$/.test(k))
+    .map((k) => Number(k.slice(9))).sort();
+  mapYear = years[years.length - 1];
+  $("years").replaceChildren(...years.map((yr) => {
+    const b = el("button", { type: "button", text: yr, "aria-pressed": yr === mapYear });
+    b.addEventListener("click", () => {
+      mapYear = yr;
+      for (const other of $("years").children) other.setAttribute("aria-pressed", other === b);
+      layer.setStyle(styleFor);
+      map.closePopup();
+    });
+    return b;
+  }));
+  $("legend").replaceChildren(
+    ...BINS.map((b) => el("span", {}, el("i", { style: `background:${b.color}` }), b.label)),
+    el("span", {}, el("i", { style: `background:${NO_DATA}` }), "no accidents reported"));
+
+  map = L.map("india-map", { zoomSnap: 0.25, minZoom: 3, maxZoom: 8, attributionControl: false });
+  layer = L.geoJSON(geo, {
+    style: styleFor,
+    onEachFeature: (feature, shape) => {
+      shape.bindPopup(() => popupFor(feature.properties));
+      shape.on("mouseover", () => shape.setStyle({ weight: 2.5, color: "#0b0b0b" }).bringToFront());
+      shape.on("mouseout", () => layer.resetStyle(shape));
+    },
+  }).addTo(map);
+  map.fitBounds(layer.getBounds(), { padding: [8, 8] });
+  map.setMaxBounds(layer.getBounds().pad(0.4));
+}
+
+/* ---------- 3. insights ---------- */
+let insights = null, insightsStarted = false;
+
+async function initInsights() {
+  if (insightsStarted) return;
+  insightsStarted = true;
+  try {
+    insights = await getJSON("data/deadliest_conditions.json");
+  } catch (error) {
+    insightsStarted = false;
+    $("insights-error").textContent = `The insights data could not be loaded. Run "python -m src.maps" to create it.`;
+    $("insights-error").hidden = false;
+    return;
+  }
+  $("insights-hint").textContent =
+    `All of India, ${insights.first_year} to ${insights.last_year} combined. Each type of condition is a separate ` +
+    `breakdown of the same accidents, so deaths must not be added up across types.`;
+  const groups = [...new Set(insights.conditions.map((c) => c.factor_group))].sort();
+  $("rank-group").replaceChildren(el("option", { value: "", text: "All types (top 15)" }),
+    ...groups.map((g) => el("option", { value: g, text: pretty(g) })));
+  $("rank-by").addEventListener("change", renderRanking);
+  $("rank-group").addEventListener("change", renderRanking);
+  renderRanking();
+}
+
+function renderRanking() {
+  const by = $("rank-by").value, group = $("rank-group").value;
+  let rows = insights.conditions.filter((c) => !group || c.factor_group === group);
+  rows = [...rows].sort((a, b) => b[by] - a[by]);
+  const shown = group ? rows : rows.slice(0, 15);
+  const reference = by === "severity" ? insights.national_severity : null;
+  const max = Math.max(...shown.map((c) => c[by]), reference || 0) * 1.18;
+
+  $("ranking").replaceChildren(...shown.map((c) => {
+    const width = c[by] / max * 100;
+    const text = by === "severity" ? c.severity.toFixed(1) : fmt(c.killed);
+    const plot = el("div", { class: "plot", title:
+      `${c.factor_value}: ${c.severity.toFixed(1)} deaths per 100 accidents; ${fmt(c.killed)} deaths in ${fmt(c.accidents)} accidents` },
+      el("div", { class: "fill", style: `width:${width}%` }),
+      el("div", { class: "value", style: `left:${width}%`, text }));
+    if (reference) plot.append(el("div", { class: "ref", style: `left:${reference / max * 100}%` }));
+    return el("div", { class: "hbar" },
+      el("div", { class: "name" }, c.factor_value, group ? "" : el("small", { text: pretty(c.factor_group) })),
+      plot);
+  }));
+  $("ranking-legend").hidden = !reference;
+  if (reference) $("ranking-ref").textContent = `India overall: ${reference.toFixed(1)} deaths per 100 accidents`;
+  $("ranking-table").replaceChildren(table(
+    ["Condition", "Type", "Accidents", "Deaths", "Deaths per 100 accidents"],
+    rows.map((c) => [c.factor_value, pretty(c.factor_group), fmt(c.accidents), fmt(c.killed), c.severity.toFixed(1)])));
+}
+
+/* ---------- start ---------- */
+showTab(location.hash.slice(1) || "risk");
+connect();
+</script>
+</body>
+</html>

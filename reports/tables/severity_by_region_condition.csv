@@ -1,0 +1,92 @@
+factor_group,factor_value,region,accidents,killed,severity
+road_feature,Bridge,Central,11434,3321,29.04
+road_feature,Bridge,East,7765,4577,58.94
+road_feature,Bridge,India,84548,34731,41.08
+road_feature,Bridge,North,25607,13290,51.9
+road_feature,Bridge,North-East,4376,1607,36.72
+road_feature,Bridge,South,27430,7921,28.88
+road_feature,Bridge,West,7936,4015,50.59
+road_feature,Culvert,Central,9593,2965,30.91
+road_feature,Culvert,East,5410,3445,63.68
+road_feature,Culvert,India,50820,21218,41.75
+road_feature,Culvert,North,17968,9081,50.54
+road_feature,Culvert,North-East,2898,943,32.54
+road_feature,Culvert,South,12371,3544,28.65
+road_feature,Culvert,West,2580,1240,48.06
+road_feature,Curved road,Central,46897,14569,31.07
+road_feature,Curved road,East,35345,21130,59.78
+road_feature,Curved road,India,328257,119546,36.42
+road_feature,Curved road,North,66623,33158,49.77
+road_feature,Curved road,North-East,9549,4021,42.11
+road_feature,Curved road,South,138030,32867,23.81
+road_feature,Curved road,West,31813,13801,43.38
+road_feature,Ongoing road works/Under construction,Central,9243,2117,22.9
+road_feature,Ongoing road works/Under construction,East,8562,5228,61.06
+road_feature,Ongoing road works/Under construction,India,59241,25710,43.4
+road_feature,Ongoing road works/Under construction,North,26810,13697,51.09
+road_feature,Ongoing road works/Under construction,North-East,2844,1029,36.18
+road_feature,Ongoing road works/Under construction,South,8368,2013,24.06
+road_feature,Ongoing road works/Under construction,West,3414,1626,47.63
+road_feature,Others,Central,68863,17457,25.35
+road_feature,Others,East,18143,10714,59.05
+road_feature,Others,India,306958,101412,33.04
+road_feature,Others,North,125143,55790,44.58
+road_feature,Others,North-East,7435,3025,40.69
+road_feature,Others,South,85697,13791,16.09
+road_feature,Others,West,1677,635,37.87
+road_feature,Potholes,Central,4717,1119,23.72
+road_feature,Potholes,East,1893,1037,54.78
+road_feature,Potholes,India,27682,11494,41.52
+road_feature,Potholes,North,14566,7488,51.41
+road_feature,Potholes,North-East,1748,577,33.01
+road_feature,Potholes,South,4298,1041,24.22
+road_feature,Potholes,West,460,232,50.43
+road_feature,Steep grade,Central,5870,1541,26.25
+road_feature,Steep grade,East,2234,1381,61.82
+road_feature,Steep grade,India,28559,11887,41.62
+road_feature,Steep grade,North,11526,6028,52.3
+road_feature,Steep grade,North-East,1279,511,39.95
+road_feature,Steep grade,South,4843,1090,22.51
+road_feature,Steep grade,West,2807,1336,47.6
+road_feature,Straight road,Central,234157,67299,28.74
+road_feature,Straight road,East,152660,91145,59.7
+road_feature,Straight road,India,1771109,629358,35.53
+road_feature,Straight road,North,284034,141112,49.68
+road_feature,Straight road,North-East,27711,11886,42.89
+road_feature,Straight road,South,819689,210341,25.66
+road_feature,Straight road,West,252858,107575,42.54
+weather,Foggy & Misty,Central,27600,7992,28.96
+weather,Foggy & Misty,East,29132,19247,66.07
+weather,Foggy & Misty,India,191560,83176,43.42
+weather,Foggy & Misty,North,66588,35719,53.64
+weather,Foggy & Misty,North-East,9012,3437,38.14
+weather,Foggy & Misty,South,53346,13814,25.9
+weather,Foggy & Misty,West,5882,2967,50.44
+weather,Hail/Sleet,Central,3770,1031,27.35
+weather,Hail/Sleet,East,2939,1459,49.64
+weather,Hail/Sleet,India,24477,11309,46.2
+weather,Hail/Sleet,North,13291,7317,55.05
+weather,Hail/Sleet,North-East,1640,599,36.52
+weather,Hail/Sleet,South,1911,420,21.98
+weather,Hail/Sleet,West,926,483,52.16
+weather,Others,Central,54972,15872,28.87
+weather,Others,East,44814,25494,56.89
+weather,Others,India,246376,106748,43.33
+weather,Others,North,99889,48432,48.49
+weather,Others,North-East,7306,3201,43.81
+weather,Others,South,36915,12542,33.98
+weather,Others,West,2480,1207,48.67
+weather,Rainy,Central,41802,12216,29.22
+weather,Rainy,East,26256,15894,60.53
+weather,Rainy,India,223347,83150,37.23
+weather,Rainy,North,56383,27907,49.5
+weather,Rainy,North-East,10305,3851,37.37
+weather,Rainy,South,70075,15502,22.12
+weather,Rainy,West,18526,7780,42.0
+weather,Sunny/Clear,Central,262630,73277,27.9
+weather,Sunny/Clear,East,128871,76563,59.41
+weather,Sunny/Clear,India,1971414,670972,34.04
+weather,Sunny/Clear,North,336126,160269,47.68
+weather,Sunny/Clear,North-East,29577,12511,42.3
+weather,Sunny/Clear,South,938479,230329,24.54
+weather,Sunny/Clear,West,275731,118023,42.8

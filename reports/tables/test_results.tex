@@ -1,0 +1,25 @@
+\begin{table}[t]
+\caption{Test-set performance on the 2023 to 2024 data ($n = 3{,}005$). ROC-AUC and PR-AUC are one-vs-rest, macro-averaged. Bold marks the best pipeline in each column. $^\dagger$Reference model only.}
+\label{tab:test_results}
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Model & Strategy & Acc. & Bal. acc. & Macro-F1 & Rec. Low & Rec. Med. & Rec. High & ROC-AUC & PR-AUC \\
+\midrule
+Majority class baseline & Always High & 0.402 & 0.333 & 0.191 & 0.000 & 0.000 & 1.000 & 0.500 & 0.333 \\
+Decision Tree & No resampling & 0.693 & 0.692 & 0.687 & 0.821 & 0.544 & 0.711 & 0.872 & 0.768 \\
+Decision Tree & Class weights & 0.735 & 0.734 & 0.733 & 0.783 & 0.673 & 0.748 & 0.874 & 0.762 \\
+Decision Tree & SMOTEN & 0.716 & 0.716 & 0.711 & 0.822 & 0.597 & 0.728 & 0.858 & 0.738 \\
+AdaBoost & No resampling & 0.719 & 0.718 & 0.717 & 0.776 & 0.645 & 0.733 & 0.868 & 0.762 \\
+AdaBoost & Class weights & 0.714 & 0.720 & 0.716 & 0.796 & \textbf{0.694} & 0.668 & 0.867 & 0.752 \\
+AdaBoost & SMOTEN & 0.720 & 0.720 & 0.719 & 0.777 & 0.660 & 0.723 & 0.869 & 0.752 \\
+KNN & No resampling & 0.753 & 0.746 & 0.744 & 0.844 & 0.567 & \textbf{0.828} & 0.886 & 0.792 \\
+KNN & SMOTEN & 0.737 & 0.733 & 0.730 & 0.830 & 0.588 & 0.781 & 0.883 & 0.785 \\
+Categorical Naive Bayes & No resampling & 0.716 & 0.710 & 0.707 & 0.802 & 0.551 & 0.778 & 0.875 & 0.770 \\
+Categorical Naive Bayes & Class weights & 0.712 & 0.709 & 0.707 & 0.800 & 0.582 & 0.746 & 0.875 & 0.771 \\
+Categorical Naive Bayes & SMOTEN & 0.716 & 0.711 & 0.708 & 0.805 & 0.552 & 0.776 & 0.875 & 0.772 \\
+Random Forest$^\dagger$ & No resampling & 0.747 & 0.745 & 0.742 & 0.828 & 0.627 & 0.779 & 0.898 & 0.811 \\
+Random Forest$^\dagger$ & Class weights & \textbf{0.781} & \textbf{0.781} & \textbf{0.778} & \textbf{0.866} & 0.686 & 0.792 & \textbf{0.920} & \textbf{0.848} \\
+Random Forest$^\dagger$ & SMOTEN & 0.746 & 0.747 & 0.744 & 0.831 & 0.664 & 0.747 & 0.899 & 0.813 \\
+\bottomrule
+\end{tabular}
+\end{table}

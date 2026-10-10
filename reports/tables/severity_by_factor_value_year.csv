@@ -1,0 +1,133 @@
+factor_group,factor_value,year,accidents,killed,severity
+collision_type,Fixed object,2019,14507,5739,39.56
+collision_type,Fixed object,2020,12882,5039,39.12
+collision_type,Fixed object,2021,14436,6600,45.72
+collision_type,Fixed object,2022,15368,7307,47.55
+collision_type,Fixed object,2023,17451,8291,47.51
+collision_type,Fixed object,2024,16246,7521,46.29
+collision_type,Head on collision,2019,87452,26772,30.61
+collision_type,Head on collision,2020,73743,25289,34.29
+collision_type,Head on collision,2021,76304,27248,35.71
+collision_type,Head on collision,2022,77886,26413,33.91
+collision_type,Head on collision,2023,84348,28898,34.26
+collision_type,Head on collision,2024,84429,28400,33.64
+collision_type,Hit and run,2019,69621,29354,42.16
+collision_type,Hit and run,2020,52448,23159,44.16
+collision_type,Hit and run,2021,57415,25938,45.18
+collision_type,Hit and run,2022,67387,30486,45.24
+collision_type,Hit and run,2023,68783,31209,45.37
+collision_type,Hit and run,2024,68584,34030,49.62
+collision_type,Hit from back,2019,89923,27765,30.88
+collision_type,Hit from back,2020,73039,22989,31.47
+collision_type,Hit from back,2021,87368,28712,32.86
+collision_type,Hit from back,2022,98668,32907,33.35
+collision_type,Hit from back,2023,110656,36804,33.26
+collision_type,Hit from back,2024,113907,37404,32.84
+collision_type,Hit from side,2019,57987,16342,28.18
+collision_type,Hit from side,2020,48010,14271,29.73
+collision_type,Hit from side,2021,60221,18299,30.39
+collision_type,Hit from side,2022,71146,20357,28.61
+collision_type,Hit from side,2023,73805,20623,27.94
+collision_type,Hit from side,2024,77112,21716,28.16
+collision_type,Others,2019,73826,22625,30.65
+collision_type,Others,2020,57499,20331,35.36
+collision_type,Others,2021,66296,23978,36.17
+collision_type,Others,2022,76058,25320,33.29
+collision_type,Others,2023,71298,22109,31.01
+collision_type,Others,2024,79853,26282,32.91
+collision_type,Run off road,2019,19055,8419,44.18
+collision_type,Run off road,2020,18210,7782,42.73
+collision_type,Run off road,2021,19478,9150,46.98
+collision_type,Run off road,2022,20590,9862,47.9
+collision_type,Run off road,2023,21527,10196,47.36
+collision_type,Run off road,2024,19082,8917,46.73
+collision_type,Vehicle overturn,2019,23314,9011,38.65
+collision_type,Vehicle overturn,2020,19211,8611,44.82
+collision_type,Vehicle overturn,2021,19303,9122,47.26
+collision_type,Vehicle overturn,2022,20070,9827,48.96
+collision_type,Vehicle overturn,2023,18905,9124,48.26
+collision_type,Vehicle overturn,2024,17296,8419,48.68
+collision_type,With parked vehicle,2019,13317,5086,38.19
+collision_type,With parked vehicle,2020,11096,4243,38.24
+collision_type,With parked vehicle,2021,11611,4925,42.42
+collision_type,With parked vehicle,2022,14139,6012,42.52
+collision_type,With parked vehicle,2023,13810,5636,40.81
+collision_type,With parked vehicle,2024,11198,4486,40.06
+road_feature,Bridge,2019,14667,5553,37.86
+road_feature,Bridge,2020,12836,5049,39.33
+road_feature,Bridge,2021,12709,5337,41.99
+road_feature,Bridge,2022,14111,6258,44.35
+road_feature,Bridge,2023,15528,6552,42.19
+road_feature,Bridge,2024,14697,5982,40.7
+road_feature,Culvert,2019,9376,3641,38.83
+road_feature,Culvert,2020,6724,2762,41.08
+road_feature,Culvert,2021,6663,2960,44.42
+road_feature,Culvert,2022,7384,3473,47.03
+road_feature,Culvert,2023,10308,4271,41.43
+road_feature,Culvert,2024,10365,4111,39.66
+road_feature,Curved road,2019,60888,20141,33.08
+road_feature,Curved road,2020,47772,16746,35.05
+road_feature,Curved road,2021,49581,19120,38.56
+road_feature,Curved road,2022,54593,20573,37.68
+road_feature,Curved road,2023,58626,22263,37.97
+road_feature,Curved road,2024,56797,20703,36.45
+road_feature,Ongoing road works/Under construction,2019,11583,4455,38.46
+road_feature,Ongoing road works/Under construction,2020,9173,3894,42.45
+road_feature,Ongoing road works/Under construction,2021,9075,4014,44.23
+road_feature,Ongoing road works/Under construction,2022,9211,4054,44.01
+road_feature,Ongoing road works/Under construction,2023,9425,3904,41.42
+road_feature,Ongoing road works/Under construction,2024,10774,5389,50.02
+road_feature,Others,2019,48090,16399,34.1
+road_feature,Others,2020,43882,15157,34.54
+road_feature,Others,2021,48594,16802,34.58
+road_feature,Others,2022,57845,18406,31.82
+road_feature,Others,2023,53757,17138,31.88
+road_feature,Others,2024,54790,17510,31.96
+road_feature,Potholes,2019,4775,2140,44.82
+road_feature,Potholes,2020,3564,1471,41.27
+road_feature,Potholes,2021,3625,1481,40.86
+road_feature,Potholes,2022,4446,1856,41.75
+road_feature,Potholes,2023,5840,2161,37.0
+road_feature,Potholes,2024,5432,2385,43.91
+road_feature,Steep grade,2019,5631,2160,38.36
+road_feature,Steep grade,2020,4244,1604,37.79
+road_feature,Steep grade,2021,3967,1635,41.22
+road_feature,Steep grade,2022,4475,2056,45.94
+road_feature,Steep grade,2023,5094,2154,42.29
+road_feature,Steep grade,2024,5148,2278,44.25
+road_feature,Straight road,2019,293992,96624,32.87
+road_feature,Straight road,2020,237943,85032,35.74
+road_feature,Straight road,2021,278218,102623,36.89
+road_feature,Straight road,2022,309247,111815,36.16
+road_feature,Straight road,2023,322005,114447,35.54
+road_feature,Straight road,2024,329704,118817,36.04
+weather,Foggy & Misty,2019,33602,13405,39.89
+weather,Foggy & Misty,2020,26541,12084,45.53
+weather,Foggy & Misty,2021,28934,13372,46.22
+weather,Foggy & Misty,2022,34262,14583,42.56
+weather,Foggy & Misty,2023,34266,14617,42.66
+weather,Foggy & Misty,2024,33955,15115,44.51
+weather,Hail/Sleet,2019,4043,2036,50.36
+weather,Hail/Sleet,2020,4752,2095,44.09
+weather,Hail/Sleet,2021,3911,1872,47.86
+weather,Hail/Sleet,2022,4083,1871,45.82
+weather,Hail/Sleet,2023,3378,1516,44.88
+weather,Hail/Sleet,2024,4310,1919,44.52
+weather,Others,2019,41237,17667,42.84
+weather,Others,2020,37638,16013,42.54
+weather,Others,2021,43850,18468,42.12
+weather,Others,2022,42122,17679,41.97
+weather,Others,2023,39758,17958,45.17
+weather,Others,2024,41771,18963,45.4
+weather,Rainy,2019,39825,14240,35.76
+weather,Rainy,2020,36161,13283,36.73
+weather,Rainy,2021,36432,14455,39.68
+weather,Rainy,2022,38329,14773,38.54
+weather,Rainy,2023,37316,13734,36.8
+weather,Rainy,2024,35284,12665,35.89
+weather,Sunny/Clear,2019,330295,103765,31.42
+weather,Sunny/Clear,2020,261046,88239,33.8
+weather,Sunny/Clear,2021,299305,105805,35.35
+weather,Sunny/Clear,2022,342516,119585,34.91
+weather,Sunny/Clear,2023,365865,125065,34.18
+weather,Sunny/Clear,2024,372387,128513,34.51

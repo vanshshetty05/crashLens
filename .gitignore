@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets and local config
+.env
+.flaskenv
+
+# Generated data and trained models (raw CSV stays tracked)
+data/processed/*
+models/*
+!data/processed/.gitkeep
+!models/.gitkeep
+
+# Editors and OS
+.vscode/
+.idea/
+.dist/
+Thumbs.db
+desktop.ini
+.DS_Store

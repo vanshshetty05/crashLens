@@ -1,0 +1,6 @@
+model,model_name,strategy,mean_macro_f1,std_macro_f1,average_rank
+rf,Random Forest (reference),class_weight,0.4541369946340885,0.0836830622597142,2.0
+knn,KNN,smoten,0.44719810519588704,0.08746146432533469,2.3
+nb,Categorical Naive Bayes,class_weight,0.4247902305634904,0.08733893997672186,2.9
+dt,Decision Tree,smoten,0.3965555852106457,0.06910454045917333,3.6
+ada,AdaBoost,none,0.3799282337368945,0.06895093586315823,4.2

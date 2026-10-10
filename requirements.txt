@@ -1,0 +1,14 @@
+# CrashLens - pinned for Python 3.11
+numpy==2.4.6
+pandas==2.3.0
+scipy==1.17.1
+scikit-learn==1.9.0
+imbalanced-learn==0.14.2
+scikit-posthocs==0.17.0
+shap==0.51.0
+matplotlib==3.11.2
+joblib==1.4.2
+Flask==3.0.3
+Flask-Cors==4.0.1
+notebook==7.6.3
+pytest==9.1.1
